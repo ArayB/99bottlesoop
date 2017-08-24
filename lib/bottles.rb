@@ -6,9 +6,7 @@ class Bottles
   end
 
   def verses(start_verse, end_verse)
-    verses = []
-    start_verse.downto(end_verse) { |n| verses << verse(n) }
-    verses.join("\n")
+    start_verse.downto(end_verse).map { |n| verse(n) }.join("\n")
   end
 
   def song
