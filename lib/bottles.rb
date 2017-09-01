@@ -1,10 +1,20 @@
 class Bottles
   def verse(n)
-    "#{quantity(n).capitalize} #{container(n)} of beer on the wall, " \
-      "#{quantity(n)} #{container(n)} of beer.\n" \
-      "#{action(n)}" \
-      "#{quantity(next_amount(n))} #{container(next_amount(n))}" \
-      " of beer on the wall.\n"
+    bottle_number = bottle_number_for(n)
+    next_bottle_number = bottle_number_for(bottle_number.next_amount)
+
+    "#{bottle_number} of beer on the wall, ".capitalize  +
+      "#{bottle_number} of beer.\n" +
+      "#{bottle_number.action}" +
+      "#{next_bottle_number} of beer on the wall.\n"
+  end
+
+  def bottle_number_for(number)
+    if number.zero?
+      BottleNumberZero
+    else
+      BottleNumber
+    end.new(number)
   end
 
   def verses(start_verse, end_verse)
@@ -14,34 +24,16 @@ class Bottles
   def song
     verses(99, 0)
   end
-
-  private
-
-  def container(number)
-    BottleNumber.new(number).container
-  end
-
-  def quantity(number)
-    BottleNumber.new(number).quantity
-  end
-
-  def pronoun(number)
-    BottleNumber.new(number).pronoun
-  end
-
-  def action(number)
-    BottleNumber.new(number).action
-  end
-
-  def next_amount(number)
-    BottleNumber.new(number).next_amount
-  end
 end
 
 class BottleNumber
   attr_reader :number
   def initialize(number)
     @number = number
+  end
+
+  def to_s
+    "#{quantity} #{container}"
   end
 
   def container
@@ -53,11 +45,7 @@ class BottleNumber
   end
 
   def quantity
-    if number.zero?
-      'no more'
-    else
-      number.to_s
-    end
+    number.to_s
   end
 
   def pronoun
@@ -69,18 +57,24 @@ class BottleNumber
   end
 
   def action
-    if number.zero?
-      'Go to the store and buy some more, '
-    else
-      "Take #{pronoun} down and pass it around, "
-    end
+    "Take #{pronoun} down and pass it around, "
   end
 
   def next_amount
-    if number.zero?
-      99
-    else
-      number - 1
-    end
+    number - 1
+  end
+end
+
+class BottleNumberZero < BottleNumber
+  def quantity
+    'no more'
+  end
+
+  def action
+    'Go to the store and buy some more, '
+  end
+
+  def next_amount
+    99
   end
 end
