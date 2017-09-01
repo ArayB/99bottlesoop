@@ -12,6 +12,8 @@ class Bottles
   def bottle_number_for(number)
     if number.zero?
       BottleNumberZero
+    elsif number == 1
+      BottleNumberOne
     else
       BottleNumber
     end.new(number)
@@ -37,11 +39,7 @@ class BottleNumber
   end
 
   def container
-    if number == 1
-      'bottle'
-    else
-      'bottles'
-    end
+    'bottles'
   end
 
   def quantity
@@ -49,11 +47,7 @@ class BottleNumber
   end
 
   def pronoun
-    if number == 1
-      'it'
-    else
-      'one'
-    end
+    'one'
   end
 
   def action
@@ -76,5 +70,15 @@ class BottleNumberZero < BottleNumber
 
   def next_amount
     99
+  end
+end
+
+class BottleNumberOne < BottleNumber
+  def container
+    'bottle'
+  end
+
+  def pronoun
+    'it'
   end
 end
